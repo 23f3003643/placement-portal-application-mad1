@@ -1,0 +1,139 @@
+{% extends "admin_layout.html" %}
+{% block admin_content %}
+
+<h2 class="fw-bold">Manage Placement Drives</h2>
+<p class="text-muted">Approve or reject placement drives</p>
+
+<div class="card shadow-sm p-4">
+
+<h5 class="mb-3">Placement Drives</h5>
+
+<input id="driveSearch"
+class="form-control mb-3"
+placeholder="Search by company, job title...">
+
+<div class="table-responsive">
+
+<table class="table align-middle">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Company</th>
+<th>Job Title</th>
+<th>Location</th>
+<th>Salary</th>
+<th>Deadline</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="driveTable">
+
+{% for d in drives %}
+
+<tr>
+
+<td>DR{{ "%03d"|format(d.id) }}</td>
+<td>{{ d.company.name }}</td>
+<td>{{ d.job_title }}</td>
+<td>{{ d.location }}</td>
+<td>{{ d.salary }}</td>
+<td>{{ d.deadline }}</td>
+
+<td>
+
+{% if d.status == "Approved" %}
+<span class="badge bg-dark">approved</span>
+{% else %}
+<span class="badge bg-warning">pending</span>
+{% endif %}
+
+</td>
+
+<td>
+
+<!-- VIEW -->
+<td>
+
+<button class="btn btn-light"
+data-bs-toggle="modal"
+data-bs-target="#drive{{ d.id }}">
+<i class="fa fa-eye"></i>
+</button>
+
+{% if d.status == "Pending" %}
+
+<a href="/admin/approve_drive/{{ d.id }}"
+class="btn btn-dark">
+<i class="fa fa-check"></i>
+</a>
+
+<a href="/admin/reject_drive/{{ d.id }}"
+class="btn btn-danger">
+<i class="fa fa-times"></i>
+</a>
+
+{% endif %}
+
+<a href="/admin/blacklist_drive/{{ d.id }}"
+class="btn btn-danger">
+<i class="fa fa-ban"></i>
+</a>
+
+</td>
+
+</tr>
+
+<!-- DRIVE DETAILS MODAL -->
+
+<div class="modal fade" id="drive{{ d.id }}">
+<div class="modal-dialog">
+<div class="modal-content p-4">
+
+<h4>Placement Drive Details</h4>
+
+<p><b>Company:</b> {{ d.company.name }}</p>
+<p><b>Job Title:</b> {{ d.job_title }}</p>
+<p><b>Description:</b> {{ d.job_description }}</p>
+<p><b>Eligibility:</b> {{ d.eligibility }}</p>
+<p><b>CGPA:</b> {{ d.min_cgpa }}</p>
+<p><b>Salary:</b> {{ d.salary }}</p>
+<p><b>Location:</b> {{ d.location }}</p>
+<p><b>Deadline:</b> {{ d.deadline }}</p>
+
+<button class="btn btn-light"
+data-bs-dismiss="modal">Close</button>
+
+</div>
+</div>
+</div>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+</div>
+</div>
+
+<script>
+
+document.getElementById("driveSearch").addEventListener("keyup", function() {
+
+let value = this.value.toLowerCase();
+let rows = document.querySelectorAll("#driveTable tr");
+
+rows.forEach(row => {
+
+row.style.display =
+row.innerText.toLowerCase().includes(value) ? "" : "none";
+
+});
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends "admin_layout.html" %}
+{% block admin_content %}
+
+<h2 class="fw-bold">Manage Students</h2>
+<p class="text-muted">View and manage student accounts</p>
+
+<div class="card shadow-sm p-4">
+
+<h5 class="mb-3">Student List</h5>
+
+<!-- SEARCH FORM -->
+<form method="GET" class="mb-3">
+
+<div class="input-group">
+
+<input
+type="text"
+name="search"
+class="form-control"
+placeholder="Search by name, ID, email or phone"
+value="{{ search or '' }}"
+>
+
+<button class="btn btn-dark">
+<i class="fa fa-search"></i> Search
+</button>
+
+</div>
+
+</form>
+
+<div class="table-responsive">
+
+<table class="table align-middle">
+
+<thead>
+<tr>
+<th>Student ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Branch</th>
+<th>CGPA</th>
+<th>Year</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for s in students %}
+
+<tr>
+
+<td>{{ s.student_id }}</td>
+<td>{{ s.name }}</td>
+<td>{{ s.email }}</td>
+<td>{{ s.phone }}</td>
+<td>{{ s.branch }}</td>
+<td>{{ s.cgpa }}</td>
+<td>{{ s.year }}</td>
+
+<td>
+{% if s.active %}
+<span class="badge bg-success">Active</span>
+{% else %}
+<span class="badge bg-danger">Inactive</span>
+{% endif %}
+</td>
+
+<td>
+
+<!-- VIEW BUTTON -->
+<button
+class="btn btn-light"
+data-bs-toggle="modal"
+data-bs-target="#student{{ s.id }}"
+>
+<i class="fa fa-eye"></i>
+</button>
+
+<!-- BLACKLIST BUTTON -->
+{% if s.active %}
+<a href="/admin/blacklist_student/{{ s.id }}"
+class="btn btn-danger">
+<i class="fa fa-ban"></i>
+</a>
+{% else %}
+<span class="badge bg-secondary">Blacklisted</span>
+{% endif %}
+
+</td>
+
+</tr>
+
+<!-- STUDENT DETAILS MODAL -->
+
+<div class="modal fade" id="student{{ s.id }}">
+<div class="modal-dialog">
+<div class="modal-content p-4">
+
+<h4>Student Details</h4>
+<p class="text-muted">Complete information about the student</p>
+
+<div class="row">
+
+<div class="col-6">
+<label>Student ID</label>
+<p>{{ s.student_id }}</p>
+</div>
+
+<div class="col-6">
+<label>Name</label>
+<p>{{ s.name }}</p>
+</div>
+
+<div class="col-6">
+<label>Email</label>
+<p>{{ s.email }}</p>
+</div>
+
+<div class="col-6">
+<label>Phone</label>
+<p>{{ s.phone }}</p>
+</div>
+
+<div class="col-6">
+<label>Degree</label>
+<p>{{ s.degree }}</p>
+</div>
+
+<div class="col-6">
+<label>Branch</label>
+<p>{{ s.branch }}</p>
+</div>
+
+<div class="col-6">
+<label>CGPA</label>
+<p>{{ s.cgpa }}</p>
+</div>
+
+<div class="col-6">
+<label>Year</label>
+<p>{{ s.year }}</p>
+</div>
+
+</div>
+
+<button
+class="btn btn-light mt-3"
+data-bs-dismiss="modal"
+>
+Close
+</button>
+
+</div>
+</div>
+</div>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+</div>
+</div>
+
+{% endblock %}

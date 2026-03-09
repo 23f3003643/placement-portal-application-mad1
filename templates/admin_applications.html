@@ -1,0 +1,81 @@
+{% extends "admin_layout.html" %}
+{% block admin_content %}
+
+<h2 class="fw-bold">View Applications</h2>
+<p class="text-muted">Complete application history</p>
+
+<div class="card shadow-sm p-4">
+
+<h5>All Applications</h5>
+
+<div class="row mb-3">
+
+<div class="col-md-3">
+<select class="form-select">
+<option>All Statuses</option>
+<option>Applied</option>
+<option>Shortlisted</option>
+<option>Selected</option>
+<option>Rejected</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<select class="form-select">
+<option>All Companies</option>
+</select>
+</div>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="table align-middle">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Student</th>
+<th>Student ID</th>
+<th>Branch</th>
+<th>CGPA</th>
+<th>Company</th>
+<th>Job Title</th>
+<th>Applied Date</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for app in applications %}
+
+<tr>
+
+<td>APP{{ "%03d"|format(app.id) }}</td>
+<td>{{ app.student.name }}</td>
+<td>{{ app.student.student_id }}</td>
+<td>{{ app.student.branch }}</td>
+<td>{{ app.student.cgpa }}</td>
+<td>{{ app.drive.company.name }}</td>
+<td>{{ app.drive.job_title }}</td>
+<td>{{ app.applied_on.date() }}</td>
+
+<td>
+<span class="badge bg-dark">
+{{ app.status }}
+</span>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+{% endblock %}

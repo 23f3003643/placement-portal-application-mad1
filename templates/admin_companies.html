@@ -1,0 +1,228 @@
+{% extends "admin_layout.html" %}
+{% block admin_content %}
+
+<h2 class="fw-bold">Manage Companies</h2>
+<p class="text-muted">Approve, reject, or manage company registrations</p>
+
+<div class="card p-4 shadow-sm">
+
+<h5 class="mb-3">Company List</h5>
+
+<!-- SEARCH BAR -->
+
+<form method="GET" class="mb-3">
+
+<div class="row g-2">
+
+<div class="col-md-4">
+
+<input
+type="text"
+name="search"
+class="form-control"
+placeholder="Search company by name..."
+value="{{ search or '' }}"
+>
+
+</div>
+
+<div class="col-md-2">
+
+<button class="btn btn-dark w-100">
+
+<i class="fa fa-search"></i> Search
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+
+<div class="table-responsive">
+
+<table class="table align-middle">
+
+<thead>
+<tr>
+<th>Company ID</th>
+<th>Company</th>
+<th>Email</th>
+<th>HR Contact</th>
+<th>Status</th>
+<th>Approval</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for c in companies %}
+
+<tr>
+
+<td>COM{{ "%03d"|format(c.id) }}</td>
+
+<td>{{ c.name }}</td>
+
+<td>{{ c.email }}</td>
+
+<td>{{ c.hr_contact }}</td>
+
+<!-- ACCOUNT STATUS -->
+
+<td>
+
+{% if c.active %}
+<span class="badge bg-dark">Active</span>
+{% else %}
+<span class="badge bg-secondary">Inactive</span>
+{% endif %}
+
+</td>
+
+
+<!-- APPROVAL STATUS -->
+
+<td>
+
+{% if c.approved %}
+<span class="badge bg-success">Approved</span>
+{% else %}
+<span class="badge bg-warning text-dark">Pending</span>
+{% endif %}
+
+</td>
+
+
+<!-- ACTION BUTTONS -->
+
+<td class="d-flex gap-2">
+
+<!-- VIEW -->
+
+<button
+class="btn btn-light btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#company{{ c.id }}">
+
+<i class="fa fa-eye"></i>
+
+</button>
+
+
+<!-- APPROVE / REJECT -->
+
+{% if not c.approved %}
+
+<a
+href="{{ url_for('approve_company', id=c.id) }}"
+class="btn btn-success btn-sm">
+
+<i class="fa fa-check"></i>
+
+</a>
+
+<a
+href="{{ url_for('reject_company', id=c.id) }}"
+class="btn btn-danger btn-sm">
+
+<i class="fa fa-times"></i>
+
+</a>
+
+{% endif %}
+
+
+<!-- BLACKLIST / ACTIVATE -->
+
+{% if c.active %}
+
+<a
+href="{{ url_for('blacklist_company', id=c.id) }}"
+class="btn btn-danger btn-sm">
+
+<i class="fa fa-ban"></i>
+
+</a>
+
+{% else %}
+
+<a
+href="{{ url_for('activate_company', id=c.id) }}"
+class="btn btn-success btn-sm">
+
+<i class="fa fa-check"></i>
+
+</a>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+
+<!-- COMPANY DETAILS MODAL -->
+
+<div class="modal fade" id="company{{ c.id }}">
+
+<div class="modal-dialog">
+
+<div class="modal-content p-4">
+
+<h4>Company Details</h4>
+
+<hr>
+
+<p><b>Company ID:</b> COM{{ "%03d"|format(c.id) }}</p>
+
+<p><b>Company Name:</b> {{ c.name }}</p>
+
+<p><b>Email:</b> {{ c.email }}</p>
+
+<p><b>HR Name:</b> {{ c.hr_name }}</p>
+
+<p><b>HR Contact:</b> {{ c.hr_contact }}</p>
+
+<p><b>Website:</b>
+<a href="{{ c.website }}" target="_blank">
+{{ c.website }}
+</a>
+</p>
+
+<p><b>Description:</b><br>
+{{ c.description }}
+</p>
+
+<div class="text-end">
+
+<button
+class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "admin_layout.html" %}
+{% block admin_content %}
+
+<h2 class="fw-bold">Admin Dashboard</h2>
+<p class="text-muted">Overview of placement portal statistics</p>
+
+<!-- Pending approvals -->
+
+<div class="alert alert-warning">
+Pending Approvals:
+<span class="badge bg-warning text-dark">{{ pending_companies }} Companies</span>
+<span class="badge bg-warning text-dark">{{ pending_drives }} Drives</span>
+</div>
+
+<!-- STAT CARDS -->
+
+<div class="row g-4">
+
+<div class="col-md-3">
+<div class="card shadow-sm p-3">
+Total Students
+<h3>{{ total_students }}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow-sm p-3">
+Total Companies
+<h3>{{ total_companies }}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow-sm p-3">
+Placement Drives
+<h3>{{ total_drives }}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow-sm p-3">
+Total Applications
+<h3>{{ total_applications }}</h3>
+</div>
+</div>
+
+</div>
+
+<!-- CHARTS -->
+
+<div class="row mt-4">
+
+<div class="col-md-6">
+<div class="card p-3 shadow-sm">
+
+<h5>Application Status Distribution</h5>
+
+<canvas id="statusChart"></canvas>
+
+</div>
+</div>
+
+<div class="col-md-6">
+<div class="card p-3 shadow-sm">
+
+<h5>Placement Drive Status</h5>
+
+<canvas id="driveChart"></canvas>
+
+</div>
+</div>
+
+</div>
+
+<!-- RECENT APPLICATIONS -->
+
+<div class="card p-3 mt-4 shadow-sm">
+
+<h5>Recent Applications</h5>
+
+{% for app in recent_apps %}
+
+<div class="border-bottom py-2 d-flex justify-content-between">
+
+<div>
+<strong>{{ app.student.name }}</strong><br>
+Applied for {{ app.drive.job_title }}
+</div>
+
+<div>
+<span class="badge bg-info">{{ app.status }}</span><br>
+<small>{{ app.applied_on.date() }}</small>
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<!-- CHART JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const statusData = {{ [applied, shortlisted, selected, rejected] | tojson }};
+const driveData = {{ [total_drives - pending_drives, pending_drives] | tojson }};
+
+new Chart(document.getElementById("statusChart"), {
+    type: "bar",
+    data: {
+        labels: ["Applied","Shortlisted","Selected","Rejected"],
+        datasets: [{
+            label: "Applications",
+            data: statusData,
+            backgroundColor: "#3b82f6"
+        }]
+    }
+});
+
+new Chart(document.getElementById("driveChart"), {
+    type: "pie",
+    data: {
+        labels: ["Approved","Pending"],
+        datasets: [{
+            data: driveData,
+            backgroundColor: ["#10b981","#f59e0b"]
+        }]
+    }
+});
+
+</script>
+
+{% endblock %}
