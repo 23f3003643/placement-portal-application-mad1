@@ -1,0 +1,127 @@
+{% extends "company_layout.html" %}
+
+{% block company_content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+<h2 class="fw-bold">My Placement Drives</h2>
+
+<a href="{{ url_for('create_drive') }}" class="btn btn-success">
+<i class="fa fa-plus"></i> Create New Drive
+</a>
+
+</div>
+
+<p class="text-muted">Manage your recruitment drives</p>
+
+{% for d in drives %}
+
+<div class="card p-4 shadow-sm mb-3">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<h5>{{ d.job_title }}</h5>
+
+<p class="text-muted">
+{{ d.location }} • {{ d.salary }}
+</p>
+
+</div>
+
+<div>
+
+{% if d.status == "Approved" %}
+<span class="badge bg-dark">Approved</span>
+
+{% elif d.status == "Pending" %}
+<span class="badge bg-warning text-dark">Pending</span>
+
+{% else %}
+<span class="badge bg-secondary">Closed</span>
+{% endif %}
+
+</div>
+
+</div>
+
+
+<div class="row mt-3">
+
+<div class="col-md-6">
+
+<p><b>Drive ID:</b> DRV{{ "%03d"|format(d.id) }}</p>
+
+<p><b>Min CGPA:</b> {{ d.min_cgpa }}</p>
+
+<p><b>Job Description:</b><br>
+{{ d.job_description }}
+</p>
+
+</div>
+
+<div class="col-md-6">
+
+<p><b>Deadline:</b> {{ d.deadline }}</p>
+
+<p><b>Applicants:</b> {{ d.applications|length }}</p>
+
+</div>
+
+</div>
+
+
+<div class="mt-3 d-flex gap-2">
+
+<a href="{{ url_for('drive_applications', drive_id=d.id) }}"
+class="btn btn-dark btn-sm">
+
+<i class="fa fa-users"></i>
+View Applications ({{ d.applications|length }})
+
+</a>
+
+
+<!-- EDIT DRIVE -->
+
+{% if d.status != "Closed" %}
+<a href="{{ url_for('edit_drive', id=d.id) }}"
+class="btn btn-outline-primary btn-sm">
+
+<i class="fa fa-edit"></i>
+Edit
+
+</a>
+{% endif %}
+
+
+<!-- CLOSE DRIVE -->
+
+{% if d.status == "Approved" %}
+<a href="{{ url_for('close_drive', id=d.id) }}"
+class="btn btn-outline-secondary btn-sm">
+
+Close Drive
+
+</a>
+{% endif %}
+
+
+<!-- DELETE DRIVE -->
+
+<a href="{{ url_for('delete_drive', id=d.id) }}"
+class="btn btn-danger btn-sm">
+
+<i class="fa fa-trash"></i>
+Delete
+
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

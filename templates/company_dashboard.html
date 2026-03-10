@@ -1,0 +1,72 @@
+{% extends "company_layout.html" %}
+
+{% block company_content %}
+
+<h2 class="fw-bold">Company Dashboard</h2>
+<p>Welcome back, {{ current_user.name }}!</p>
+
+<div class="row">
+
+<div class="col-md-3">
+<div class="card p-3 shadow-sm">
+<h6>Active Drives</h6>
+<h2>{{ active_drives }}</h2>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3 shadow-sm">
+<h6>Pending Approval</h6>
+<h2>{{ pending_drives }}</h2>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3 shadow-sm">
+<h6>Total Applicants</h6>
+<h2>{{ total_applications }}</h2>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3 shadow-sm">
+<h6>Total Drives</h6>
+<h2>{{ total_drives }}</h2>
+</div>
+</div>
+
+</div>
+
+
+<div class="card mt-4 p-4">
+
+<h5>Quick Actions</h5>
+
+<div class="row mt-3">
+
+<div class="col-md-4">
+<a href="/company/create_drive" class="btn btn-outline-dark w-100 p-4">
+<i class="fa-solid fa-plus"></i>
+<br>Create New Drive
+</a>
+</div>
+
+<div class="col-md-4">
+<a href="/company/drives" class="btn btn-outline-dark w-100 p-4">
+<i class="fa-solid fa-plus"></i>
+<br>View My Drives
+</a>
+</div>
+
+<div class="col-md-4">
+<a href="/company/profile" class="btn btn-outline-dark w-100 p-4">
+<i class="fa-solid fa-plus"></i>
+<br>Edit Profile
+</a>
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

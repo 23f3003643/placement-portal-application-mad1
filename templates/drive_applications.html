@@ -1,0 +1,223 @@
+{% extends "company_layout.html" %}
+
+{% block company_content %}
+
+<h2 class="fw-bold mb-2">{{ drive.job_title }}</h2>
+<p class="text-muted">Applications for this drive</p>
+
+
+<!-- DRIVE DETAILS -->
+
+<div class="card p-4 shadow-sm mb-4">
+
+<h5 class="mb-3">Drive Details</h5>
+
+<div class="row">
+
+<div class="col-md-3">
+<b>Location</b><br>
+{{ drive.location }}
+</div>
+
+<div class="col-md-3">
+<b>Salary</b><br>
+{{ drive.salary }}
+</div>
+
+<div class="col-md-3">
+<b>Deadline</b><br>
+{{ drive.deadline }}
+</div>
+
+<div class="col-md-3">
+<b>Total Applications</b><br>
+{{ applications|length }}
+</div>
+
+</div>
+
+</div>
+
+
+<!-- APPLICATION TABLE -->
+
+<div class="card p-4 shadow-sm">
+
+<h5>Student Applications</h5>
+
+<div class="table-responsive mt-3">
+
+<table class="table align-middle">
+
+<thead>
+<tr>
+<th>Student ID</th>
+<th>Name</th>
+<th>Branch</th>
+<th>CGPA</th>
+<th>Applied Date</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for app in applications %}
+
+<tr>
+
+<td>{{ app.student.student_id }}</td>
+
+<td>{{ app.student.name }}</td>
+
+<td>{{ app.student.branch }}</td>
+
+<td>{{ app.student.cgpa }}</td>
+
+<td>{{ app.applied_on.strftime("%Y-%m-%d") }}</td>
+
+<td>
+<span class="badge bg-secondary">
+{{ app.status }}
+</span>
+</td>
+
+<td class="d-flex gap-2">
+
+<!-- VIEW BUTTON -->
+
+<button class="btn btn-light btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#app{{ app.id }}">
+
+<i class="fa fa-eye"></i>
+
+</button>
+
+
+<!-- STATUS DROPDOWN -->
+
+<div class="dropdown">
+
+<button class="btn btn-secondary btn-sm dropdown-toggle"
+data-bs-toggle="dropdown">
+
+Update
+
+</button>
+
+<ul class="dropdown-menu">
+
+<li>
+<a class="dropdown-item"
+href="{{ url_for('update_status', app_id=app.id, new_status='Applied') }}">
+Applied
+</a>
+</li>
+
+<li>
+<a class="dropdown-item"
+href="{{ url_for('update_status', app_id=app.id, new_status='Shortlisted') }}">
+Shortlist
+</a>
+</li>
+
+<li>
+<a class="dropdown-item"
+href="{{ url_for('update_status', app_id=app.id, new_status='Selected') }}">
+Select
+</a>
+</li>
+
+<li>
+<a class="dropdown-item"
+href="{{ url_for('update_status', app_id=app.id, new_status='Rejected') }}">
+Reject
+</a>
+</li>
+
+</ul>
+
+</div>
+
+</td>
+
+</tr>
+
+
+<!-- APPLICATION DETAILS MODAL -->
+
+<div class="modal fade" id="app{{ app.id }}">
+
+<div class="modal-dialog">
+
+<div class="modal-content p-4">
+
+<div class="d-flex justify-content-between">
+
+<h4>Application Details</h4>
+
+<button class="btn-close" data-bs-dismiss="modal"></button>
+
+</div>
+
+<hr>
+
+<p><b>Student ID</b><br>
+{{ app.student.student_id }}
+</p>
+
+<p><b>Name</b><br>
+{{ app.student.name }}
+</p>
+
+<p><b>Email</b><br>
+{{ app.student.email }}
+</p>
+
+<p><b>Branch</b><br>
+{{ app.student.branch }}
+</p>
+
+<p><b>CGPA</b><br>
+{{ app.student.cgpa }}
+</p>
+
+<p><b>Applied Date</b><br>
+{{ app.applied_on.strftime("%Y-%m-%d") }}
+</p>
+
+<p>
+<b>Application Status</b><br>
+<span class="badge bg-dark">{{ app.status }}</span>
+</p>
+
+<div class="text-end">
+
+<button class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+{% endblock %}
