@@ -1,0 +1,174 @@
+/*  RESET  */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    min-height:100vh;
+    background:url("/static/images/bg.png") no-repeat center center fixed;
+    background-size:cover;
+    color:#111827;
+}
+
+
+/* MAIN CONTENT  */
+
+.main-content{
+    background:#f8f9fa;
+    min-height:100vh;
+    padding:30px;
+}
+
+
+/*  SIDEBAR  */
+
+.sidebar{
+    width:260px;
+    min-height:100vh;
+    background:#ffffff;
+    border-right:1px solid #e5e7eb;
+    padding:20px;
+}
+
+.sidebar a{
+    font-weight:500;
+    transition:all 0.2s ease;
+}
+
+
+/* Sidebar Hover */
+
+.sidebar .btn:hover{
+    background:#f1f5f9;
+    transform:translateX(3px);
+}
+
+
+/* Sidebar Active Button */
+
+.sidebar .btn.active{
+    background:#e5e7eb;
+}
+
+
+/* DASHBOARD CARDS  */
+
+.dashboard-card{
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+    background:white;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    transition:all 0.2s ease;
+}
+
+.dashboard-card h3{
+    font-weight:700;
+    font-size:28px;
+}
+
+/* Card hover effect */
+
+.dashboard-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.12);
+}
+
+
+/*  TABLE  */
+
+.table{
+    background:white;
+}
+
+.table thead{
+    background:#f1f5f9;
+}
+
+.table th{
+    font-weight:600;
+}
+
+.table tr:hover{
+    background:#f8fafc;
+}
+
+
+/* BADGES  */
+
+.badge{
+    padding:6px 12px;
+    font-size:12px;
+    border-radius:20px;
+}
+
+
+/* BUTTONS  */
+
+.btn{
+    border-radius:8px;
+    font-weight:500;
+}
+
+.btn-light{
+    border:1px solid #e5e7eb;
+}
+
+.btn-light:hover{
+    background:#f1f5f9;
+}
+
+
+/*  CARDS */
+
+.card{
+    border:none;
+    border-radius:12px;
+    transition:all 0.2s ease;
+}
+
+.card:hover{
+    box-shadow:0 6px 18px rgba(0,0,0,0.12);
+}
+
+
+/* FORMS  */
+
+input, select, textarea{
+    border-radius:8px;
+}
+
+input:focus, select:focus, textarea:focus{
+    box-shadow:none;
+    border-color:#2563eb;
+}
+
+
+/*  HERO (HOME PAGE)  */
+
+.hero{
+    text-align:center;
+    margin-top:120px;
+    color:#111827;
+}
+
+.hero h1{
+    font-size:48px;
+    font-weight:700;
+}
+
+.hero p{
+    margin-top:10px;
+    font-size:18px;
+}
+
+
+/*  FLASH TOAST  */
+
+.toast{
+    border-radius:10px;
+}
