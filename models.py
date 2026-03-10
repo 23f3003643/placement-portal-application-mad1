@@ -4,9 +4,7 @@ from werkzeug.security import generate_password_hash
 from datetime import datetime
 
 
-# =================================================
 # USER MODEL
-# =================================================
 
 class User(db.Model, UserMixin):
 
@@ -39,7 +37,7 @@ class User(db.Model, UserMixin):
 
     year = db.Column(db.String(10))
 
-    resume = db.Column(db.String(200))  # resume file path
+    resume = db.Column(db.String(200))  
 
 
     # ---------- COMPANY FIELDS ----------
@@ -57,10 +55,8 @@ class User(db.Model, UserMixin):
         return f"<User {self.email}>"
 
 
-
-# =================================================
 # PLACEMENT DRIVE MODEL
-# =================================================
+
 
 class PlacementDrive(db.Model):
 
@@ -91,7 +87,7 @@ class PlacementDrive(db.Model):
 
     applications = db.relationship('Application', backref='drive', lazy=True)
 
-    # relationship to company
+   
     company = db.relationship(
         'User',
         backref=db.backref('drives', lazy=True)
@@ -101,9 +97,7 @@ class PlacementDrive(db.Model):
         return f"<Drive {self.job_title}>"
 
 
-# =================================================
 # APPLICATION MODEL
-# =================================================
 
 class Application(db.Model):
 
@@ -130,10 +124,7 @@ class Application(db.Model):
     def __repr__(self):
         return f"<Application {self.id}>"
 
-
-# =================================================
 # CREATE DEFAULT ADMIN
-# =================================================
 
 def create_admin():
 
