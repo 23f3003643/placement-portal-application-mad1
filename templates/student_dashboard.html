@@ -1,0 +1,73 @@
+{% extends "student_layout.html" %}
+
+{% block student_content %}
+
+<h2 class="fw-bold">Student Dashboard</h2>
+<p>Welcome back, {{ current_user.name }}!</p>
+
+<div class="row g-3 text-center">
+
+<div class="col-md-3">
+<div class="card shadow-sm p-3 h-100">
+<p class="text-muted mb-1">Available Drives</p>
+<h3>{{ available_drives }}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow-sm p-3 h-100">
+<p class="text-muted mb-1">My Applications</p>
+<h3>{{ my_applications }}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow-sm p-3 h-100">
+<p class="text-muted mb-1">Shortlisted</p>
+<h3>{{ shortlisted }}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow-sm p-3 h-100">
+<p class="text-muted mb-1">Selected</p>
+<h3>{{ selected }}</h3>
+</div>
+</div>
+
+</div>
+
+<br>
+
+<div class="card p-4 shadow-sm">
+
+<h5 class="mb-3">Quick Actions</h5>
+
+<div class="row g-3 text-center">
+
+<div class="col-md-4">
+<a href="/student/drives" class="btn btn-light w-100 p-4">
+<i class="fa-solid fa-magnifying-glass fa-lg"></i><br>
+Browse Drives
+</a>
+</div>
+
+<div class="col-md-4">
+<a href="/student/applications" class="btn btn-light w-100 p-4">
+<i class="fa-solid fa-file fa-lg"></i><br>
+My Applications
+</a>
+</div>
+
+<div class="col-md-4">
+<a href="/student/profile" class="btn btn-light w-100 p-4">
+<i class="fa-solid fa-user fa-lg"></i><br>
+Update Profile
+</a>
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

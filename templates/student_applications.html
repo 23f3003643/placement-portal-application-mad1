@@ -1,0 +1,96 @@
+{% extends "student_layout.html" %}
+
+{% block student_content %}
+
+<h2 class="fw-bold">My Applications</h2>
+
+<div class="row g-3 mb-4">
+
+<div class="col-md-3">
+<div class="card p-3 text-center shadow-sm">
+<h4>{{ total }}</h4>
+<p>Total Applications</p>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3 text-center shadow-sm">
+<h4>{{ pending }}</h4>
+<p>Pending</p>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3 text-center shadow-sm">
+<h4>{{ shortlisted }}</h4>
+<p>Shortlisted</p>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3 text-center shadow-sm">
+<h4>{{ selected }}</h4>
+<p>Selected</p>
+</div>
+</div>
+
+</div>
+
+<div class="card p-4 shadow-sm">
+
+<table class="table align-middle">
+
+<thead>
+
+<tr>
+<th>Application ID</th>
+<th>Company</th>
+<th>Job Title</th>
+<th>Applied Date</th>
+<th>Status</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for app in applications %}
+
+<tr>
+
+<td>{{ app.id }}</td>
+
+<td>{{ app.drive.company.name }}</td>
+
+<td>{{ app.drive.job_title }}</td>
+
+<td>{{ app.applied_on.strftime('%d %b %Y') }}</td>
+
+<td>
+
+{% if app.status == "Applied" %}
+<span class="badge bg-secondary">Applied</span>
+
+{% elif app.status == "Shortlisted" %}
+<span class="badge bg-warning text-dark">Shortlisted</span>
+
+{% elif app.status == "Selected" %}
+<span class="badge bg-success">Selected</span>
+
+{% else %}
+<span class="badge bg-danger">Rejected</span>
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% endblock %}

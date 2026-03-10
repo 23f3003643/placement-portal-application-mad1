@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<nav class="navbar navbar-dark bg-primary px-4">
+    <span class="navbar-brand">
+        <i class="fa-solid fa-graduation-cap"></i>
+        Campus Placement Portal
+        <small class="ms-2">Student Portal</small>
+    </span>
+
+    <a href="/logout" class="text-white text-decoration-none">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+</nav>
+
+<div class="d-flex">
+
+<!-- SIDEBAR -->
+
+<div class="bg-white border p-3 shadow-sm" style="width:260px; min-height:100vh">
+
+<a href="/student/dashboard" class="btn btn-light w-100 mb-3 text-start">
+<i class="fa-solid fa-table"></i> Dashboard
+</a>
+
+<a href="/student/drives" class="btn btn-light w-100 mb-2 text-start">
+<i class="fa-solid fa-magnifying-glass"></i> Browse Drives
+</a>
+
+<a href="/student/applications" class="btn btn-light w-100 mb-2 text-start">
+<i class="fa-solid fa-file"></i> My Applications
+</a>
+
+<a href="/student/profile" class="btn btn-light w-100 text-start">
+<i class="fa-solid fa-user"></i> My Profile
+</a>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="flex-grow-1 p-4 bg-light">
+
+{% block student_content %}{% endblock %}
+
+</div>
+
+</div>
+
+{% endblock %}

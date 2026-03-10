@@ -1,0 +1,126 @@
+{% extends "student_layout.html" %}
+
+{% block student_content %}
+
+<h2 class="fw-bold">My Profile</h2>
+
+<!-- PERSONAL INFORMATION -->
+
+<div class="card p-4 shadow-sm mb-4">
+
+<h5>Personal Information</h5>
+
+<form method="POST">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label>Student ID</label>
+<input class="form-control" value="{{ current_user.student_id }}" disabled>
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Full Name</label>
+<input name="name" class="form-control" value="{{ current_user.name }}">
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Email</label>
+<input class="form-control" value="{{ current_user.email }}" disabled>
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Phone</label>
+<input name="phone" class="form-control" value="{{ current_user.phone }}">
+</div>
+
+</div>
+
+<button class="btn btn-dark">Save Changes</button>
+
+</form>
+
+</div>
+
+
+
+<!-- ACADEMIC INFORMATION -->
+
+<div class="card p-4 shadow-sm mb-4">
+
+<h5>Academic Information</h5>
+
+<form method="POST">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label>Degree</label>
+<input class="form-control" value="{{ current_user.degree }}" disabled>
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Branch</label>
+<input name="branch" class="form-control" value="{{ current_user.branch }}" disabled>
+</div>
+
+<div class="col-md-6 mb-3">
+<label>CGPA</label>
+<input name="cgpa" class="form-control" value="{{ current_user.cgpa }}">
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Year</label>
+<input class="form-control" value="{{ current_user.year }}" disabled>
+</div>
+
+</div>
+
+<p class="text-primary">
+Note: Academic information can only be updated by contacting the admin.
+</p>
+
+</form>
+
+</div>
+
+<!-- RESUME SECTION -->
+
+<div class="card p-4 shadow-sm">
+
+<h5>Resume</h5>
+
+<form method="POST" action="/student/upload_resume" enctype="multipart/form-data">
+
+<div class="border border-primary rounded p-5 text-center">
+
+<i class="fa-solid fa-file-arrow-up fa-2x text-primary"></i>
+
+<p class="mt-2">
+Upload your resume (PDF only)
+</p>
+
+<input type="file" name="resume" class="form-control mt-3">
+
+</div>
+
+<br>
+
+<button class="btn btn-primary">Upload Resume</button>
+
+</form>
+
+{% if current_user.resume %}
+
+<p class="mt-3">
+Current Resume:
+<a href="{{ url_for('static', filename='resumes/' + current_user.resume) }}" target="_blank">
+View Resume
+</a>
+</p>
+
+{% endif %}
+
+</div>
+
+{% endblock %}
