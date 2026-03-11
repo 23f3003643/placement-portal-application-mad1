@@ -1,17 +1,23 @@
 # Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
 # Virtual environments
 venv/
-.env/
+env/
+.venv/
 
-# Database files
+# Flask instance folder (database stored here)
+instance/
+
+# SQLite database files
 *.db
 *.sqlite3
 
 # Uploaded resumes
-static/resumes/*
+static/resumes/
 
 # OS files
 .DS_Store
@@ -22,3 +28,4 @@ Thumbs.db
 
 # Temporary files
 *.log
+*.tmp
