@@ -8,7 +8,6 @@
 Post a new job opportunity for students
 </p>
 
-
 <div class="card p-4 shadow-sm">
 
 <h5>Drive Details</h5>
@@ -17,9 +16,7 @@ Post a new job opportunity for students
 Fill in the details for your placement drive
 </p>
 
-
-<form method="POST">
-
+<form method="POST" action="{{ url_for('create_drive') }}">
 
 <div class="mb-3">
 
@@ -137,17 +134,13 @@ Students will be able to apply once it's approved.
 </div>
 
 
-<button class="btn btn-dark">
-
+<button type="submit" class="btn btn-dark">
 Create Drive
-
 </button>
 
 <a href="{{ url_for('company_dashboard') }}"
 class="btn btn-light">
-
 Cancel
-
 </a>
 
 </form>

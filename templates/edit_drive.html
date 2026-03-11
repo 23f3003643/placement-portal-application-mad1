@@ -64,7 +64,8 @@ value="{{ drive.location }}">
 <input type="date"
 name="deadline"
 class="form-control"
-value="{{ drive.deadline }}">
+value="{{ drive.deadline.strftime('%Y-%m-%d') }}" 
+required>
 </div>
 
 <button class="btn btn-dark">

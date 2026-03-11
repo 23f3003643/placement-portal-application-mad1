@@ -36,7 +36,10 @@
 
 </div>
 
+
 <div class="card p-4 shadow-sm">
+
+<div class="table-responsive">
 
 <table class="table align-middle">
 
@@ -48,6 +51,7 @@
 <th>Job Title</th>
 <th>Applied Date</th>
 <th>Status</th>
+<th>Action</th>
 </tr>
 
 </thead>
@@ -58,7 +62,7 @@
 
 <tr>
 
-<td>{{ app.id }}</td>
+<td>APP{{ "%03d"|format(app.id) }}</td>
 
 <td>{{ app.drive.company.name }}</td>
 
@@ -83,6 +87,18 @@
 
 </td>
 
+<td>
+
+<a href="{{ url_for('delete_application', id=app.id) }}"
+class="btn btn-outline-danger btn-sm"
+onclick="return confirm('Are you sure you want to delete this application?')">
+
+<i class="fa fa-trash"></i>
+
+</a>
+
+</td>
+
 </tr>
 
 {% endfor %}
@@ -90,6 +106,8 @@
 </tbody>
 
 </table>
+
+</div>
 
 </div>
 

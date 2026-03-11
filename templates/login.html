@@ -1,31 +1,75 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container mt-5" style="max-width:450px;">
-    <div class="card p-4 shadow">
+<div class="d-flex justify-content-center align-items-center vh-100">
 
-        <h3 class="text-center mb-4">Login</h3>
+<div class="card shadow-lg p-4" style="width:420px;">
 
-        <form method="POST">
+<h3 class="text-center mb-4">
+<i class="fa-solid fa-user-lock"></i> Portal Login
+</h3>
 
-            <select name="role" class="form-control mb-3" required>
-                <option value="student">Student</option>
-                <option value="company">Company</option>
-                <option value="admin">Admin</option>
-            </select>
+<form method="POST">
 
-            <input type="email" name="email" class="form-control mb-3" placeholder="Email" required>
-            <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
+<!-- ROLE SELECT -->
 
-            <button class="btn btn-dark w-100">Login</button>
-        </form>
+<label class="form-label">Login As</label>
+<select name="role" class="form-control mb-3" required>
+<option value="student">Student</option>
+<option value="company">Company</option>
+<option value="admin">Admin</option>
+</select>
 
-        <div class="text-center mt-3">
-            <a href="{{ url_for('register_student') }}">Register as Student</a><br>
-            <a href="{{ url_for('register_company') }}">Register as Company</a>
-        </div>
+<!-- EMAIL -->
 
-    </div>
+<label class="form-label">Email</label>
+<input
+type="email"
+name="email"
+class="form-control mb-3"
+placeholder="Enter your email"
+required
+>
+
+<!-- PASSWORD -->
+
+<label class="form-label">Password</label>
+<input
+type="password"
+name="password"
+class="form-control mb-4"
+placeholder="Enter your password"
+required
+>
+
+<!-- LOGIN BUTTON -->
+
+<button class="btn btn-dark w-100 mb-3">
+<i class="fa-solid fa-right-to-bracket"></i> Login
+</button>
+
+</form>
+
+<hr>
+
+<!-- REGISTER OPTIONS -->
+
+<p class="text-center mb-3 fw-semibold">New User?</p>
+
+<div class="d-grid gap-2">
+
+<a href="{{ url_for('register_student') }}" class="btn btn-primary">
+<i class="fa-solid fa-user-graduate"></i> Register as Student
+</a>
+
+<a href="{{ url_for('register_company') }}" class="btn btn-success">
+<i class="fa-solid fa-building"></i> Register as Company
+</a>
+
+</div>
+
+</div>
+
 </div>
 
 {% endblock %}

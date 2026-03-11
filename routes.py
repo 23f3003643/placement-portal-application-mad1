@@ -4,6 +4,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from extensions import db, login_manager
 from models import User, PlacementDrive, Application
+from datetime import date , datetime
 
 import os
 from werkzeug.utils import secure_filename
@@ -290,6 +291,32 @@ def init_routes(app):
 
         return redirect(url_for('admin_companies'))
 
+    #ADMIN DELETE COMPANY AFTER BLACKLISTING
+
+    @app.route('/admin/delete_company/<int:id>')
+    @login_required
+    def delete_company(id):
+
+        if current_user.role != 'admin':
+            return redirect(url_for('login'))
+
+        company = User.query.get_or_404(id)
+
+        if company.role != "company":
+            flash("Invalid company")
+            return redirect(url_for('admin_companies'))
+
+        if company.active:
+            flash("Blacklist company before deleting")
+            return redirect(url_for('admin_companies'))
+
+        db.session.delete(company)
+        db.session.commit()
+
+        flash("Company deleted permanently")
+
+        return redirect(url_for('admin_companies'))
+
     #ADMIN APPROVE DRIVE
 
     @app.route('/admin/approve_drive/<int:id>')
@@ -331,6 +358,49 @@ def init_routes(app):
         db.session.commit()
 
         flash("Student blacklisted")
+        return redirect(url_for('admin_students'))
+
+    #ADMIN DELETE STUDENT AFTER BLACKLISTING
+
+    @app.route('/admin/delete_student/<int:id>')
+    @login_required
+    def delete_student(id):
+
+        if current_user.role != 'admin':
+            return redirect(url_for('login'))
+
+        student = User.query.get_or_404(id)
+
+        if student.role != "student":
+            flash("Invalid student")
+            return redirect(url_for('admin_students'))
+
+        if student.active:
+            flash("Blacklist student before deleting")
+            return redirect(url_for('admin_students'))
+
+        db.session.delete(student)
+        db.session.commit()
+
+        flash("Student deleted permanently")
+
+        return redirect(url_for('admin_students'))
+
+    #ADMIN ACTIVATE STUDENT AFTER BLACKLISTING
+    @app.route('/admin/activate_student/<int:id>')
+    @login_required
+    def activate_student(id):
+
+        if current_user.role != 'admin':
+            return redirect(url_for('login'))
+
+        student = User.query.get_or_404(id)
+
+        student.active = True
+        db.session.commit()
+
+        flash("Student activated successfully")
+
         return redirect(url_for('admin_students'))
 
     #BLACKLIST COMPANY
@@ -445,23 +515,39 @@ def init_routes(app):
         if current_user.role != 'company':
             return redirect(url_for('login'))
 
+        if not current_user.approved:
+            flash("Your company must be approved by admin before creating placement drives.")
+            return redirect(url_for('company_dashboard'))
+
         if request.method == 'POST':
+
+            job_title = request.form.get('job_title')
+            job_description = request.form.get('job_description')
+            eligibility = request.form.get('eligibility')
+            min_cgpa = request.form.get('min_cgpa')
+            salary = request.form.get('salary')
+            location = request.form.get('location')
+
+        # Convert string date → python date
+            deadline_str = request.form.get('deadline')
+            deadline = datetime.strptime(deadline_str, "%Y-%m-%d").date()
 
             drive = PlacementDrive(
                 company_id=current_user.id,
-                job_title=request.form['job_title'],
-                job_description=request.form['job_description'],
-                eligibility=request.form['eligibility'],
-                min_cgpa=request.form['min_cgpa'],
-                salary=request.form['salary'],
-                location=request.form['location'],
-                deadline=request.form['deadline']
+                job_title=job_title,
+                job_description=job_description,
+                eligibility=eligibility,
+                min_cgpa=min_cgpa,
+                salary=salary,
+                location=location,
+                deadline=deadline,
+                status="Pending"
             )
 
             db.session.add(drive)
             db.session.commit()
 
-            flash("Drive created succesfully")
+            flash("Drive created successfully and sent for admin approval.")
 
             return redirect(url_for('company_drives'))
 
@@ -496,25 +582,26 @@ def init_routes(app):
 
         return redirect(url_for('company_drives'))
 
-    #DELETE DRIVE
-
-    @app.route('/company/delete_drive/<int:id>')
+    #COMPANY REOPEN DRIVE
+    @app.route('/company/reopen_drive/<int:id>')
     @login_required
-    def delete_drive(id):
+    def reopen_drive(id):
 
         drive = PlacementDrive.query.get_or_404(id)
 
         if drive.company_id != current_user.id:
             return redirect(url_for('company_drives'))
 
-        db.session.delete(drive)
+        drive.status = "Approved"
+
         db.session.commit()
 
-        flash("Drive deleted")
+        flash("Drive reopened successfully")
 
         return redirect(url_for('company_drives'))
 
     #EDIT DRIVE
+
     @app.route('/company/edit_drive/<int:id>', methods=['GET','POST'])
     @login_required
     def edit_drive(id):
@@ -529,13 +616,16 @@ def init_routes(app):
 
         if request.method == 'POST':
 
-            drive.job_title = request.form['job_title']
-            drive.job_description = request.form['job_description']
-            drive.eligibility = request.form['eligibility']
-            drive.min_cgpa = request.form['min_cgpa']
-            drive.salary = request.form['salary']
-            drive.location = request.form['location']
-            drive.deadline = request.form['deadline']
+            drive.job_title = request.form.get('job_title')
+            drive.job_description = request.form.get('job_description')
+            drive.eligibility = request.form.get('eligibility')
+            drive.min_cgpa = request.form.get('min_cgpa')
+            drive.salary = request.form.get('salary')
+            drive.location = request.form.get('location')
+
+            # Convert string → Python date
+            deadline_str = request.form.get('deadline')
+            drive.deadline = datetime.strptime(deadline_str, "%Y-%m-%d").date()
 
             db.session.commit()
 
@@ -563,6 +653,7 @@ def init_routes(app):
             drive=drive,
             applications=applications
         )
+    # APPLICATION STATUS
 
     @app.route('/company/update_status/<int:app_id>/<string:new_status>')
     @login_required
@@ -577,6 +668,27 @@ def init_routes(app):
 
         flash("Application status updated")
         return redirect(url_for('company_dashboard'))
+
+    #DELETE DRIVE
+    @app.route('/company/delete_drive/<int:id>')
+    @login_required
+    def delete_drive(id):
+
+        if current_user.role != 'company':
+            return redirect(url_for('login'))
+
+        drive = PlacementDrive.query.get_or_404(id)
+
+        if drive.company_id != current_user.id:
+            flash("Unauthorized action")
+            return redirect(url_for('company_drives'))
+
+        db.session.delete(drive)
+        db.session.commit()
+
+        flash("Drive deleted successfully")
+
+        return redirect(url_for('company_drives'))
 
     # STUDENT ROUTES
 
@@ -636,6 +748,18 @@ def init_routes(app):
 
         drives = query.all()
 
+        today = datetime.today().date()
+
+        for drive in drives:
+            try:
+                deadline = datetime.strptime(drive.deadline, "%Y-%m-%d").date()
+                if deadline < today and drive.status != "Closed":
+                    drive.status = "Closed"
+            except:
+                pass
+
+        db.session.commit()
+
         applied_ids = [
             app.drive_id for app in Application.query.filter_by(
                 student_id=current_user.id
@@ -647,7 +771,8 @@ def init_routes(app):
             drives=drives,
             applied_drive_ids=applied_ids,
             search=search,
-            cgpa=cgpa
+            cgpa=cgpa,
+            current_date=date.today()
         )
 
     @app.route('/student/apply/<int:drive_id>')
@@ -657,6 +782,16 @@ def init_routes(app):
         if current_user.role != 'student':
             return redirect(url_for('login'))
 
+        if not current_user.resume:
+            flash("Upload your resume before applying for placement drives")
+            return redirect(url_for('student_profile'))
+
+        drive = PlacementDrive.query.get_or_404(drive_id)
+
+        if float(current_user.cgpa) < float(drive.min_cgpa):
+            flash("You are not eligible for this placement drive due to CGPA requirement.")
+            return redirect(url_for('student_drives'))
+
         existing = Application.query.filter_by(
             student_id=current_user.id,
             drive_id=drive_id
@@ -664,17 +799,18 @@ def init_routes(app):
 
         if existing:
             flash("You already applied for this drive")
-        else:
-            new_app = Application(
-                student_id=current_user.id,
-                drive_id=drive_id,
-                status='Applied'
-            )
+            return redirect(url_for('student_drives'))
 
-            db.session.add(new_app)
-            db.session.commit()
+        new_app = Application(
+            student_id=current_user.id,
+            drive_id=drive_id,
+            status='Applied'
+        )
 
-            flash("Application submitted successfully!")
+        db.session.add(new_app)
+        db.session.commit()
+
+        flash("Application submitted successfully")
 
         return redirect(url_for('student_drives'))
 
@@ -716,16 +852,43 @@ def init_routes(app):
  
         if request.method == 'POST':
 
-            current_user.branch = request.form['branch']
-            current_user.cgpa = request.form['cgpa']
-            current_user.phone = request.form['phone']
+            current_user.name = request.form.get('name')
+            current_user.branch = request.form.get('branch')
+            current_user.cgpa = request.form.get('cgpa')
+            current_user.phone = request.form.get('phone')
+            current_user.year = request.form.get('year')
+            
 
             db.session.commit()
+
+            flash("Profile updated successfully")
+
+            return redirect(url_for('student_profile'))
 
         return render_template(
             'student_profile.html',
             student=current_user
         )
+
+    @app.route('/student/delete_application/<int:id>')
+    @login_required
+    def delete_application(id):
+
+        if current_user.role != 'student':
+            return redirect(url_for('login'))
+
+        application = Application.query.get_or_404(id)
+
+        if application.student_id != current_user.id:
+            flash("Unauthorized action")
+            return redirect(url_for('student_applications'))
+
+        db.session.delete(application)
+        db.session.commit()
+
+        flash("Application deleted")
+
+        return redirect(url_for('student_applications'))
 
     # RESUME UPLOADING
 

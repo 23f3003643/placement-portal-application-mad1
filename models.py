@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash
 from datetime import datetime
 
 
-# USER MODEL
+#  USER MODEL 
 
 class User(db.Model, UserMixin):
 
@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean, default=True)
 
 
-    # ---------- STUDENT FIELDS ----------
+    # STUDENT FIELDS 
 
     student_id = db.Column(db.String(50))
 
@@ -37,10 +37,10 @@ class User(db.Model, UserMixin):
 
     year = db.Column(db.String(10))
 
-    resume = db.Column(db.String(200))  
+    resume = db.Column(db.String(200))
 
 
-    # ---------- COMPANY FIELDS ----------
+    # COMPANY FIELDS 
 
     hr_name = db.Column(db.String(100))
 
@@ -51,12 +51,29 @@ class User(db.Model, UserMixin):
     description = db.Column(db.Text)
 
 
+    # STUDENT APPLICATIONS RELATIONSHIP
+    applications = db.relationship(
+        'Application',
+        backref='student',
+        lazy=True,
+        cascade="all, delete-orphan"
+    )
+
+
+    # COMPANY DRIVES RELATIONSHIP
+    drives = db.relationship(
+        'PlacementDrive',
+        backref='company',
+        lazy=True,
+        cascade="all, delete-orphan"
+    )
+
+
     def __repr__(self):
         return f"<User {self.email}>"
 
 
 # PLACEMENT DRIVE MODEL
-
 
 class PlacementDrive(db.Model):
 
@@ -64,7 +81,7 @@ class PlacementDrive(db.Model):
 
     company_id = db.Column(
         db.Integer,
-        db.ForeignKey('user.id'),
+        db.ForeignKey('user.id', ondelete="CASCADE"),
         nullable=False
     )
 
@@ -80,24 +97,26 @@ class PlacementDrive(db.Model):
 
     location = db.Column(db.String(100))
 
-    deadline = db.Column(db.String(50), nullable=False)
+    deadline = db.Column(db.Date, nullable=False)
 
     status = db.Column(db.String(20), default='Pending')
     # Pending / Approved / Closed
 
-    applications = db.relationship('Application', backref='drive', lazy=True)
 
-   
-    company = db.relationship(
-        'User',
-        backref=db.backref('drives', lazy=True)
+    # APPLICATION RELATIONSHIP
+    applications = db.relationship(
+        'Application',
+        backref='drive',
+        lazy=True,
+        cascade="all, delete-orphan"
     )
+
 
     def __repr__(self):
         return f"<Drive {self.job_title}>"
 
 
-# APPLICATION MODEL
+#  APPLICATION MODEL 
 
 class Application(db.Model):
 
@@ -105,13 +124,13 @@ class Application(db.Model):
 
     student_id = db.Column(
         db.Integer,
-        db.ForeignKey('user.id'),
+        db.ForeignKey('user.id', ondelete="CASCADE"),
         nullable=False
     )
 
     drive_id = db.Column(
         db.Integer,
-        db.ForeignKey('placement_drive.id'),
+        db.ForeignKey('placement_drive.id', ondelete="CASCADE"),
         nullable=False
     )
 
@@ -119,12 +138,12 @@ class Application(db.Model):
 
     applied_on = db.Column(db.DateTime, default=datetime.utcnow)
 
-    student = db.relationship('User', foreign_keys=[student_id])
 
     def __repr__(self):
         return f"<Application {self.id}>"
 
-# CREATE DEFAULT ADMIN
+
+# CREATE DEFAULT ADMIN 
 
 def create_admin():
 

@@ -5,9 +5,22 @@
 
     <h1 class="fw-bold mb-4">Campus Placement Portal</h1>
 
-    <h2 class="mb-4">Connecting Students and Companies</h2>
+    <h2 class="mb-5">Connecting Students and Companies</h2>
 
-    <a href="{{ url_for('login') }}" class="btn btn-dark">Login</a>
+
+    <a href="{{ url_for('login') }}" class="btn btn-dark mb-3 px-4">
+        <i class="fa fa-user-shield"></i> Login 
+    </a>
+
+
+    <a href="{{ url_for('register_student') }}" class="btn btn-primary mb-3 px-4">
+        <i class="fa fa-user-graduate"></i> Register as Student
+    </a>
+
+
+    <a href="{{ url_for('register_company') }}" class="btn btn-success px-4">
+        <i class="fa fa-building"></i> Register as Company
+    </a>
 
 </div>
 

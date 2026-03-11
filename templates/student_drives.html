@@ -6,20 +6,15 @@
 <p>Find and apply to approved placement opportunities</p>
 
 
-<!-- SEARCH + FILTER FORM -->
-
 <form method="GET" class="row g-2 mb-4">
 
 <div class="col-md-6">
-
 <input
 type="text"
 name="search"
 class="form-control"
 placeholder="Search by job title, company, or location"
-value="{{ search or '' }}"
->
-
+value="{{ search or '' }}">
 </div>
 
 <div class="col-md-3">
@@ -39,74 +34,88 @@ value="{{ search or '' }}"
 </div>
 
 <div class="col-md-3">
-
 <button class="btn btn-primary w-100">
-
 <i class="fa fa-search"></i> Search
-
 </button>
-
 </div>
 
 </form>
-
 
 
 {% for drive in drives %}
 
 <div class="card p-4 mb-3 shadow-sm">
 
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
 <h5>{{ drive.job_title }}</h5>
 
-<p class="text-muted">{{ drive.company.name }}</p>
+<p class="text-muted mb-1">{{ drive.company.name }}</p>
 
-<p>{{ drive.job_description }}</p>
+<p class="mb-2">{{ drive.job_description }}</p>
 
-<p>
-
+<p class="mb-0">
 <i class="fa-solid fa-location-dot"></i> {{ drive.location }}
-
 |
-
 Min CGPA {{ drive.min_cgpa }}
-
 |
-
 Deadline {{ drive.deadline }}
-
 </p>
 
+</div>
+
+
+<div>
+
+{% if drive.status == "Closed" %}
+<span class="badge bg-danger">Drive Closed</span>
+{% else %}
+<span class="badge bg-success">Open</span>
+{% endif %}
+
+</div>
+
+</div>
+
+
+<div class="mt-3 d-flex gap-2">
 
 <button
 class="btn btn-outline-dark"
 data-bs-toggle="modal"
-data-bs-target="#drive{{ drive.id }}"
->
-
+data-bs-target="#drive{{ drive.id }}">
 View Details
-
 </button>
 
 
-{% if drive.id in applied_drive_ids %}
+{% if drive.status == "Closed" %}
 
-<button class="btn btn-secondary">Already Applied</button>
+<button class="btn btn-secondary" disabled>
+Drive Closed
+</button>
+
+{% elif drive.id in applied_drive_ids %}
+
+<button class="btn btn-secondary" disabled>
+Already Applied
+</button>
 
 {% else %}
 
-<a href="/student/apply/{{ drive.id }}" class="btn btn-primary">
-
+<a href="{{ url_for('apply_drive', drive_id=drive.id) }}"
+class="btn btn-primary">
 Apply Now
-
 </a>
 
 {% endif %}
 
 </div>
 
+</div>
 
 
-<!-- DRIVE DETAILS MODAL -->
 
 <div class="modal fade" id="drive{{ drive.id }}">
 
@@ -118,19 +127,25 @@ Apply Now
 
 <p>{{ drive.job_description }}</p>
 
-<p>Salary: {{ drive.salary }}</p>
+<hr>
 
-<p>Location: {{ drive.location }}</p>
+<p><b>Company:</b> {{ drive.company.name }}</p>
 
-<p>Eligibility: {{ drive.eligibility }}</p>
+<p><b>Salary:</b> {{ drive.salary }}</p>
 
-<p>Deadline: {{ drive.deadline }}</p>
+<p><b>Location:</b> {{ drive.location }}</p>
 
+<p><b>Eligibility:</b> {{ drive.eligibility }}</p>
+
+<p><b>Minimum CGPA:</b> {{ drive.min_cgpa }}</p>
+
+<p><b>Application Deadline:</b> {{ drive.deadline }}</p>
+
+<div class="text-end">
 <button class="btn btn-secondary" data-bs-dismiss="modal">
-
 Close
-
 </button>
+</div>
 
 </div>
 
@@ -139,6 +154,5 @@ Close
 </div>
 
 {% endfor %}
-
 
 {% endblock %}

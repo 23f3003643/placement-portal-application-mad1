@@ -1,110 +1,95 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="d-flex justify-content-center align-items-center"
-     style="min-height: 90vh;">
+<div class="container py-5">
 
-    <div class="glass-card" style="width:750px;">
+<div class="row justify-content-center">
 
-        <div class="text-center mb-4">
-            <h2>Create Account</h2>
-            <p class="text-light">Register as a company</p>
-        </div>
+<div class="col-lg-8">
 
-        <!-- Toggle -->
-        <div class="d-flex justify-content-center mb-4">
-            <a href="/register/student"
-               class="btn btn-outline-light me-2">Student</a>
-            <a href="/register/company"
-               class="btn btn-outline-light me-2">Company</a>
-        </div>
+<div class="card shadow-lg p-4">
 
-        <form method="POST">
+<div class="text-center mb-4">
+<h2><i class="fa-solid fa-building"></i> Company Registration</h2>
+<p class="text-muted">Register your company to post placement drives</p>
+</div>
 
-            <div class="row">
+<!-- TOGGLE -->
 
-                <div class="col-12 mb-3">
-                    <label>Company Name</label>
-                    <input type="text"
-                           name="name"
-                           class="form-control"
-                           placeholder="TechCorp Solutions"
-                           required>
-                </div>
+<div class="text-center mb-4">
+<a href="{{ url_for('register_student') }}" class="btn btn-outline-secondary me-2">
+Student
+</a>
 
-                <div class="col-md-6 mb-3">
-                    <label>HR Name</label>
-                    <input type="text"
-                           name="hr_name"
-                           class="form-control"
-                           placeholder="Jane Smith">
-                </div>
+<a href="{{ url_for('register_company') }}" class="btn btn-success">
+Company
+</a>
+</div>
 
-                <div class="col-md-6 mb-3">
-                    <label>HR Contact</label>
-                    <input type="text"
-                           name="hr_contact"
-                           class="form-control"
-                           placeholder="+91-9123456789">
-                </div>
+<form method="POST">
 
-                <div class="col-md-6 mb-3">
-                    <label>Company Email</label>
-                    <input type="email"
-                           name="email"
-                           class="form-control"
-                           placeholder="hr@company.com"
-                           required>
-                </div>
+<div class="row">
 
-                <div class="col-md-6 mb-3">
-                    <label>Website</label>
-                    <input type="text"
-                           name="website"
-                           class="form-control"
-                           placeholder="https://company.com">
-                </div>
+<div class="col-12 mb-3">
+<label class="form-label">Company Name</label>
+<input type="text" name="name" class="form-control" placeholder="TechCorp Solutions" required>
+</div>
 
-                <div class="col-12 mb-3">
-                    <label>Company Description</label>
-                    <textarea name="description"
-                              class="form-control"
-                              rows="3"
-                              placeholder="Brief description of your company..."></textarea>
-                </div>
+<div class="col-md-6 mb-3">
+<label class="form-label">HR Name</label>
+<input type="text" name="hr_name" class="form-control" placeholder="Jane Smith" required>
+</div>
 
-                <div class="col-12 mb-3">
-                    <label>Password</label>
-                    <input type="password"
-                           name="password"
-                           class="form-control"
-                           required>
-                </div>
+<div class="col-md-6 mb-3">
+<label class="form-label">HR Contact</label>
+<input type="text" name="hr_contact" class="form-control" placeholder="+91 9123456789" required>
+</div>
 
-            </div>
+<div class="col-md-6 mb-3">
+<label class="form-label">Company Email</label>
+<input type="email" name="email" class="form-control" placeholder="hr@company.com" required>
+</div>
 
-            <div class="alert alert-info">
-                Note: Your registration will be reviewed by the admin.
-                You can login after approval.
-            </div>
+<div class="col-md-6 mb-3">
+<label class="form-label">Website</label>
+<input type="text" name="website" class="form-control" placeholder="https://company.com" required>
+</div>
 
-            <button type="submit"
-                    class="btn btn-premium w-100">
-                Register as Company
-            </button>
+<div class="col-12 mb-3">
+<label class="form-label">Company Description</label>
+<textarea name="description" class="form-control" rows="3" placeholder="Brief description of your company..." required></textarea>
+</div>
 
-        </form>
+<div class="col-12 mb-4">
+<label class="form-label">Password</label>
+<input type="password" name="password" class="form-control" required>
+</div>
 
-        <div class="text-center mt-3">
-            <small>
-                Already have an account?
-                <a href="/login" class="text-info">
-                    Login here
-                </a>
-            </small>
-        </div>
+</div>
 
-    </div>
+<div class="alert alert-info">
+Your company registration will be reviewed by the admin before you can access the dashboard.
+</div>
+
+<button type="submit" class="btn btn-success w-100">
+<i class="fa-solid fa-building-circle-check"></i> Register Company
+</button>
+
+</form>
+
+<div class="text-center mt-3">
+<small>
+Already have an account?
+<a href="{{ url_for('login') }}">Login here</a>
+</small>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 {% endblock %}

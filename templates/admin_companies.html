@@ -8,8 +8,6 @@
 
 <h5 class="mb-3">Company List</h5>
 
-<!-- SEARCH BAR -->
-
 <form method="GET" class="mb-3">
 
 <div class="row g-2">
@@ -39,7 +37,6 @@ value="{{ search or '' }}"
 </div>
 
 </form>
-
 
 <div class="table-responsive">
 
@@ -71,20 +68,15 @@ value="{{ search or '' }}"
 
 <td>{{ c.hr_contact }}</td>
 
-<!-- ACCOUNT STATUS -->
-
 <td>
 
 {% if c.active %}
 <span class="badge bg-dark">Active</span>
 {% else %}
-<span class="badge bg-secondary">Inactive</span>
+<span class="badge bg-secondary">Blacklisted</span>
 {% endif %}
 
 </td>
-
-
-<!-- APPROVAL STATUS -->
 
 <td>
 
@@ -95,9 +87,6 @@ value="{{ search or '' }}"
 {% endif %}
 
 </td>
-
-
-<!-- ACTION BUTTONS -->
 
 <td class="d-flex gap-2">
 
@@ -111,7 +100,6 @@ data-bs-target="#company{{ c.id }}">
 <i class="fa fa-eye"></i>
 
 </button>
-
 
 <!-- APPROVE / REJECT -->
 
@@ -135,7 +123,6 @@ class="btn btn-danger btn-sm">
 
 {% endif %}
 
-
 <!-- BLACKLIST / ACTIVATE -->
 
 {% if c.active %}
@@ -158,12 +145,22 @@ class="btn btn-success btn-sm">
 
 </a>
 
+<!-- DELETE BUTTON -->
+
+<a
+href="{{ url_for('delete_company', id=c.id) }}"
+class="btn btn-dark btn-sm"
+onclick="return confirm('Delete this company permanently?')">
+
+<i class="fa fa-trash"></i>
+
+</a>
+
 {% endif %}
 
 </td>
 
 </tr>
-
 
 <!-- COMPANY DETAILS MODAL -->
 

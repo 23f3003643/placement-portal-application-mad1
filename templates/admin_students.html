@@ -62,46 +62,84 @@ value="{{ search or '' }}"
 <td>{{ s.year }}</td>
 
 <td>
+
 {% if s.active %}
 <span class="badge bg-success">Active</span>
 {% else %}
-<span class="badge bg-danger">Inactive</span>
+<span class="badge bg-danger">Blacklisted</span>
 {% endif %}
+
 </td>
 
-<td>
+<td class="d-flex gap-2">
 
 <!-- VIEW BUTTON -->
+
 <button
-class="btn btn-light"
+class="btn btn-light btn-sm"
 data-bs-toggle="modal"
 data-bs-target="#student{{ s.id }}"
 >
+
 <i class="fa fa-eye"></i>
+
 </button>
 
-<!-- BLACKLIST BUTTON -->
+
+<!-- BLACKLIST -->
+
 {% if s.active %}
-<a href="/admin/blacklist_student/{{ s.id }}"
-class="btn btn-danger">
+
+<a href="{{ url_for('blacklist_student', id=s.id) }}"
+class="btn btn-danger btn-sm">
+
 <i class="fa fa-ban"></i>
+
 </a>
+
 {% else %}
-<span class="badge bg-secondary">Blacklisted</span>
+
+<!-- ACTIVATE -->
+
+<a href="{{ url_for('activate_student', id=s.id) }}"
+class="btn btn-success btn-sm">
+
+<i class="fa fa-check"></i>
+
+</a>
+
+<!-- DELETE -->
+
+<a href="{{ url_for('delete_student', id=s.id) }}"
+class="btn btn-dark btn-sm"
+onclick="return confirm('Delete this student permanently?')">
+
+<i class="fa fa-trash"></i>
+
+</a>
+
 {% endif %}
 
 </td>
 
 </tr>
 
+
 <!-- STUDENT DETAILS MODAL -->
 
 <div class="modal fade" id="student{{ s.id }}">
+
 <div class="modal-dialog">
+
 <div class="modal-content p-4">
 
 <h4>Student Details</h4>
-<p class="text-muted">Complete information about the student</p>
+
+<p class="text-muted">
+Complete information about the student
+</p>
+
+<hr>
 
 <div class="row">
 
@@ -147,23 +185,32 @@ class="btn btn-danger">
 
 </div>
 
+<div class="text-end mt-3">
+
 <button
-class="btn btn-light mt-3"
-data-bs-dismiss="modal"
->
+class="btn btn-secondary"
+data-bs-dismiss="modal">
+
 Close
+
 </button>
 
 </div>
+
 </div>
+
+</div>
+
 </div>
 
 {% endfor %}
 
 </tbody>
+
 </table>
 
 </div>
+
 </div>
 
 {% endblock %}

@@ -5,6 +5,14 @@
 <h2 class="fw-bold">Student Dashboard</h2>
 <p>Welcome back, {{ current_user.name }}!</p>
 
+{% if not current_user.resume %}
+<div class="alert alert-warning">
+<i class="fa fa-file"></i>
+⚠️ Please upload your resume before applying for placement drives.
+</div>
+{% endif %}
+
+
 <div class="row g-3 text-center">
 
 <div class="col-md-3">
