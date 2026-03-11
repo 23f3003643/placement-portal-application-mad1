@@ -90,11 +90,20 @@
 <button class="btn btn-light btn-sm"
 data-bs-toggle="modal"
 data-bs-target="#app{{ app.id }}">
-
 <i class="fa fa-eye"></i>
-
 </button>
 
+<!-- VIEW RESUME BUTTON -->
+
+{% if app.student.resume %}
+<a href="{{ url_for('static', filename='resumes/' + app.student.resume) }}"
+target="_blank"
+class="btn btn-primary btn-sm">
+
+<i class="fa fa-file"></i>
+
+</a>
+{% endif %}
 
 <!-- STATUS DROPDOWN -->
 
@@ -182,6 +191,26 @@ Reject
 
 <p><b>CGPA</b><br>
 {{ app.student.cgpa }}
+</p>
+
+<p><b>Resume</b><br>
+
+{% if app.student.resume %}
+
+<a href="{{ url_for('static', filename='resumes/' + app.student.resume) }}"
+target="_blank"
+class="btn btn-primary btn-sm">
+
+View Resume
+
+</a>
+
+{% else %}
+
+No resume uploaded
+
+{% endif %}
+
 </p>
 
 <p><b>Applied Date</b><br>
